@@ -1,0 +1,152 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.jai.cas</groupId>
+	<artifactId>cas_client_1</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>cas_client_1 Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<java.cas.client.version>3.4.1</java.cas.client.version>
+		<spring.version>4.2.6.RELEASE</spring.version>
+		<spring.security.version>3.2.5.RELEASE</spring.security.version>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>eu.europa.eba.common</groupId>
+			<artifactId>eba_common</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.jasig.cas.client</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<version>${java.cas.client.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-cas-client</artifactId>
+			<version>3.0.8.RELEASE</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>client1</finalName>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<directory>src/main/webapp/WEB-INF</directory>
+							<filtering>true</filtering>
+							<targetPath>WEB-INF</targetPath>
+							<includes>
+								<include>**/web.xml</include>
+								<include>**/applicationContext-security.xml</include>
+							</includes>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+
+			<!-- Tomcat plugin -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<path>/${project.build.finalName}</path>
+					<update>true</update>
+					<url>http://localhost:8080/manager/text</url>
+					<username>jay</username>
+					<password>jay</password>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
+
+
+	<profiles>
+		<!-- localhost environment -->
+		<profile>
+			<id>local</id>
+
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<properties>
+				<!-- Application server properties -->
+				<adminurl>t3://localhost:7001</adminurl>
+				<middlewareHome>C:/Oracle/Middleware</middlewareHome>
+				<weblogicHome>wlserver_12.1</weblogicHome>
+				<domainHome>C:/Oracle/Middleware/user_projects/domains/ecb_domain</domainHome>
+				<user>weblogic</user>
+				<password>weblogic1</password>
+				<name>cir-${project.version}</name>
+				<remote>false</remote>
+				<upload>true</upload>
+				<targets>AdminServer</targets>
+
+				<!-- CAS -->
+				<cas.server.host>localhost:7002</cas.server.host>
+				<cas.service.host>localhost:7002</cas.service.host>
+
+				<!-- LDAP -->
+				<ldapUrl>ldap://eb2ts-app14:389</ldapUrl>
+				<ldapAdminDn>cn=Administrator,cn=users,dc=egate-t,dc=local</ldapAdminDn>
+				<ldapAdminPwd>Password02</ldapAdminPwd>
+				<ldapUserBaseDn>dc=egate-t,dc=local</ldapUserBaseDn>
+
+			</properties>
+		</profile>
+	</profiles>
+
+</project>
